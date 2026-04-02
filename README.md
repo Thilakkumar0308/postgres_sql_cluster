@@ -66,18 +66,18 @@ Edit `postgres_cluster.cfg` and provide your PostgreSQL cluster details:
 use_agent_python = 1
 
 [pg_primary]
-host = 192.168.56.1
+host = hostname
 port = 5433
-username = admin
-password = admin123
-cluster_name = pg_cluster_01
+username = user name
+password = password
+cluster_name = cluster name
 
 [pg_replica]
-host = 192.168.56.1
-port = 5434
-username = admin
-password = admin123
-cluster_name = pg_cluster_01
+host = hostname
+port = 5433
+username = user name
+password = password
+cluster_name = cluster name
 ```
 
 ### Step 5 — Test the plugin
@@ -85,7 +85,7 @@ cluster_name = pg_cluster_01
 Run the following command to verify the plugin produces valid output before deployment:
 
 ```bash
-python3 postgres_cluster.py --host "192.168.56.1" --port "5433" --username "admin" --password "admin123" --cluster_name "pg_cluster_01"
+ python3 postgres_cluster.py  --host "localhost" --port "5432" --username "username" --password "password" --cluster_name "pg_cluster_01"
 ```
 
 ---
