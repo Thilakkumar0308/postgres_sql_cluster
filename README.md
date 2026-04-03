@@ -114,7 +114,7 @@ The agent will automatically execute the plugin within five minutes. You can vie
 
 ---
 
-# PostgreSQL Metrics Reference
+## PostgreSQL Cluster Server Monitoring Plugin Metrics
 
 ---
 
