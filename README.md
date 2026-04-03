@@ -114,59 +114,11 @@ The agent will automatically execute the plugin within five minutes. You can vie
 
 ---
 
-## PostgreSQL Cluster Metrics
-
-### PostgreSQL Cluster Performance Metrics
-
-| **Metric Name** | **Description** |
-|---|---|
-| Active Connections | The number of client connections that are currently active and executing queries on the database. |
-| Active Replication Slots | The total number of replication slots that are currently active and being consumed by a replica. |
-| Archive Ready Files Count | The number of WAL segment files that have been generated and are waiting to be archived. |
-| Archive Status Failed | The total number of WAL archiving attempts that have failed since the server started. |
-| Archive Status Success | The total number of WAL files that have been successfully archived since the server started. |
-| Available Connections | The number of remaining connection slots available for new client connections. |
-| Buffers Allocated | The total number of shared memory buffers that have been allocated by the PostgreSQL server. |
-| Buffers Backend Direct Writes | The number of buffers written directly to disk by backend processes, bypassing the shared buffer pool. |
-| Buffers Checkpoint | The total number of buffers written to disk during checkpoint operations. |
-| Buffers Clean | The total number of buffers written to disk by the background writer outside of checkpoint operations. |
-| Checkpoint Sync | The total time spent synchronizing files to disk during checkpoint operations, in milliseconds. |
-| Checkpoint Write | The total time spent writing dirty buffers to disk during checkpoint operations, in milliseconds. |
-| Checkpoints Requested | The total number of checkpoints that were triggered manually or due to WAL size limits. |
-| Checkpoints Timed | The total number of checkpoints that occurred on their scheduled interval as defined by `checkpoint_timeout`. |
-| Conflicts Buffer Pin | The number of queries cancelled on the standby due to a conflict with a buffer pin held by another process. |
-| Conflicts Deadlock | The number of queries cancelled on the standby due to deadlock conflicts during recovery. |
-| Conflicts Lock | The number of queries cancelled on the standby due to lock conflicts with the recovery process. |
-| Conflicts Snapshot | The number of queries cancelled on the standby due to snapshot conflicts, where the required row version was removed. |
-| Conflicts Tablespace | The number of queries cancelled on the standby due to a tablespace being dropped on the primary during recovery. |
-| Connection Utilization Percent | The percentage of the maximum allowed connections that are currently in use, calculated as (Active Connections / Max Connections) × 100. |
-| Current WAL LSN | The current write-ahead log sequence number (LSN) indicating the latest position written to WAL on the primary. |
-| Flush Lag | The time elapsed between WAL being written on the primary and the replica confirming it has been flushed to disk. |
-| Inactive Replication Slots | The total number of replication slots that exist but are not currently being consumed by any replica. |
-| Last Received LSN | The latest WAL log sequence number that the replica has received from the primary. |
-| Last Replayed LSN | The latest WAL log sequence number that has been successfully applied (replayed) on the replica. |
-| Logical Slots | The total number of logical replication slots configured on the PostgreSQL instance. |
-| Maxwritten Clean | The number of times the background writer stopped its cleaning scan because it had written too many buffers, as controlled by `bgwriter_lru_maxpages`. |
-| Oldest Running Transaction Age | The age in transactions of the oldest currently active transaction, which affects how far back VACUUM must retain dead row versions. |
-| Physical Slots | The total number of physical replication slots configured on the PostgreSQL instance. |
-| Receive Apply Lag | The time elapsed between WAL being received by the replica and being fully applied to the standby database. |
-| Recovery Conflicts Total | The total number of queries that have been cancelled on the standby due to conflicts arising during WAL recovery. |
-| Replay Lag | The time elapsed between WAL being written on the primary and the replica finishing replaying it to the standby database. |
-| Replay Lag Time | The total cumulative time delay in replaying WAL on the standby, measured from when it was generated on the primary. |
-| Replica Count | The total number of replica nodes currently connected to and streaming WAL from the primary. |
-| Replication Lag | The total delay between the primary writing WAL and the replica applying it, indicating how far behind the replica is. |
-| Replication Slot Count | The total number of replication slots present on the PostgreSQL instance, including both active and inactive slots. |
-| Slot Lag | The amount of WAL data (in bytes) that a replication slot has retained on disk but not yet delivered to its consumer. |
-| Timeline ID | The current WAL timeline identifier, which increments each time a standby is promoted to primary. |
-| WAL Files Count | The total number of WAL segment files currently present in the `pg_wal` directory. |
-| WAL Flush LSN | The WAL log sequence number up to which data has been flushed to durable storage on disk. |
-| WAL Insert LSN | The WAL log sequence number up to which data has been inserted into the WAL buffer in memory. |
-| WAL Total Size | The total disk space consumed by all WAL segment files currently stored in the `pg_wal` directory. |
-| Write Lag | The time elapsed between WAL being written on the primary and the replica confirming it has been written (but not yet flushed) to its WAL file. |
+# PostgreSQL Metrics Reference
 
 ---
 
-### PostgreSQL Cluster Configuration Metrics
+## Cluster Configuration Metrics
 
 | **Metric Name** | **Description** |
 |---|---|
@@ -175,18 +127,131 @@ The agent will automatically execute the plugin within five minutes. You can vie
 
 ---
 
-### Cluster Status and Node Information
+## Cluster Identity & Status Metrics
 
 | **Metric Name** | **Description** |
 |---|---|
 | Cluster Name | The name assigned to the PostgreSQL cluster, used to identify and group the primary and replica nodes being monitored. |
 | Cluster Status | The current overall health status of the cluster, reflecting whether replication and node connectivity are operating normally. |
-| Is In Recovery | Indicates whether the current node is operating in recovery mode, which is true for standby/replica nodes that are replaying WAL from the primary. |
-| Last Archived WAL File | The name of the most recent WAL segment file that was successfully archived by the `archive_command`. |
-| Node Role | The role of the monitored node within the cluster, either Primary (accepting writes) or Replica (read-only standby). |
 | PostgreSQL Version | The full version string of the PostgreSQL server software currently installed and running on the node. |
+| Timeline ID | The current WAL timeline identifier of the PostgreSQL instance, which increments each time a failover or point-in-time recovery occurs, helping track the history of the cluster's recovery events. |
+
+---
+
+## Node Information Metrics
+
+| **Metric Name** | **Description** |
+|---|---|
+| Is In Recovery | Indicates whether the current node is operating in recovery mode, which is true for standby/replica nodes that are replaying WAL from the primary. |
+| Node Role | The role of the monitored node within the cluster, either Primary (accepting writes) or Replica (read-only standby). |
+| Replica Count | The total number of standby/replica nodes currently connected and replicating from the primary node. |
 | Replication State | The current state of the replication stream, such as `streaming`, `catchup`, or `disconnected`, indicating the health of the replication connection. |
 | Server PID | The operating system process ID of the PostgreSQL server's postmaster process. |
 | Server Uptime | The total elapsed time since the PostgreSQL server was last started, indicating how long it has been running without a restart. |
 | Sync State | The replication synchronization mode for the standby, either `sync` (the primary waits for the replica to confirm WAL receipt) or `async` (the primary does not wait). |
-| WAL Receiver Status | The current status of the WAL receiver process running on the standby node, indicating whether it is actively receiving WAL data from the primary. |
+
+---
+
+## Replication Lag Metrics
+
+| **Metric Name** | **Description** |
+|---|---|
+| Replication Lag | The total delay between the primary node writing WAL data and the replica applying it, representing the overall end-to-end replication latency. |
+| Write Lag | The elapsed time between the primary flushing a WAL record to disk and receiving confirmation that the standby has written it to its own WAL file, but not yet flushed or applied it. |
+| Flush Lag | The elapsed time between the primary flushing a WAL record and receiving confirmation that the standby has flushed it to durable storage, but not yet replayed it into the database. |
+| Replay Lag | The elapsed time between the primary flushing a WAL record and receiving confirmation that the standby has fully replayed (applied) it to its database state. |
+
+---
+
+## Replication Slot Metrics
+
+| **Metric Name** | **Description** |
+|---|---|
+| Replication Slot Count | The total number of replication slots currently defined on the PostgreSQL instance, including both active and inactive slots. |
+| Active Replication Slots | The number of replication slots that currently have an active consumer (e.g., a replica or logical subscriber) connected and consuming WAL data. |
+| Inactive Replication Slots | The number of replication slots with no active consumer connected, which may cause WAL accumulation and disk pressure if left unattended. |
+| Slot Lag | The amount of WAL data (in bytes) retained on the primary due to replication slots, representing how far behind the slowest slot consumer is from the current WAL position. |
+| Physical Slots | The number of physical replication slots defined, used by streaming standby replicas to ensure the primary retains the WAL segments they need. |
+| Logical Slots | The number of logical replication slots defined, used by logical replication subscribers or tools like pglogical and Debezium to decode and stream row-level changes. |
+
+---
+
+## WAL Archive Metrics
+
+| **Metric Name** | **Description** |
+|---|---|
+| Archive Status Success | The cumulative count of WAL segment files that have been successfully archived by the `archive_command` since the server started. |
+| Archive Status Failed | The cumulative count of WAL segment archiving attempts that have failed, indicating issues with the `archive_command` or the archive destination. |
+| Last Archived WAL File | The name of the most recently archived WAL segment file, useful for confirming that archiving is progressing and identifying the last known safe recovery point. |
+| Archive Ready Files Count | The number of WAL segment files in `pg_wal/archive_status/` that are ready to be archived but have not yet been processed, indicating archiving backlog. |
+
+---
+
+## WAL Metrics
+
+| **Metric Name** | **Description** |
+|---|---|
+| Current WAL LSN | The current Log Sequence Number (LSN) representing the latest write position in the WAL stream on the primary node. |
+| WAL Insert LSN | The LSN up to which WAL records have been inserted into the WAL buffers in memory, which may be ahead of what has been flushed to disk. |
+| WAL Flush LSN | The LSN up to which WAL data has been durably flushed to disk, ensuring that all records up to this point survive a server crash. |
+| WAL Files Count | The total number of WAL segment files currently present in the `pg_wal` directory, reflecting the volume of unarchived or retained WAL data. |
+| WAL Total Size | The total disk space consumed by WAL segment files in the `pg_wal` directory, useful for monitoring storage usage and detecting unusual WAL growth. |
+
+---
+
+## Checkpoint Metrics
+
+| **Metric Name** | **Description** |
+|---|---|
+| Checkpoints Timed | The number of checkpoints that were triggered automatically by the `checkpoint_timeout` interval, indicating routine scheduled checkpoint activity. |
+| Checkpoints Requested | The number of checkpoints that were requested explicitly (e.g., due to `max_wal_size` being reached), which may indicate the system is under heavy write load. |
+| Checkpoint Write | The total time (in milliseconds) spent writing dirty buffers to disk during checkpoint operations, contributing to overall checkpoint duration. |
+| Checkpoint Sync | The total time (in milliseconds) spent syncing files to disk (via `fsync`) during checkpoints, ensuring data durability after write completion. |
+| Buffers Checkpoint | The total number of shared buffers written to disk specifically during checkpoint operations since the last statistics reset. |
+
+---
+
+## Buffer Metrics
+
+| **Metric Name** | **Description** |
+|---|---|
+| Buffers Clean | The number of dirty buffers written to disk by the background writer process during its regular cleaning passes, outside of checkpoint operations. |
+| Buffers Backend Direct Writes | The number of buffers written directly by backend processes rather than the background writer or checkpointer, which may indicate the background writer is not keeping up. |
+| Buffers Allocated | The total number of shared memory buffers allocated since the last statistics reset, reflecting buffer pool usage and cache pressure. |
+| Maxwritten Clean | The number of times the background writer stopped its cleaning scan early because it had written the maximum number of buffers allowed per round (`bgwriter_lru_maxpages`). |
+
+---
+
+## WAL Receiver Metrics
+
+| **Metric Name** | **Description** |
+|---|---|
+| WAL Receiver Status | The current operational status of the WAL receiver process on the standby node, indicating whether it is actively streaming, stopped, or in an error state. |
+| Last Received LSN | The LSN of the last WAL byte received by the standby's WAL receiver from the primary, showing how current the received WAL stream is. |
+| Last Replayed LSN | The LSN of the last WAL record that has been replayed (applied) to the standby's database, reflecting the actual data consistency point of the replica. |
+| Replay Lag Time | The time elapsed since the last WAL record was replayed on the standby, providing a human-readable measure of how stale the replica's data is. |
+| Receive Apply Lag | The gap between the last received LSN and the last replayed LSN on the standby, indicating how much received WAL is still pending application to the database. |
+
+---
+
+## Connection Metrics
+
+| **Metric Name** | **Description** |
+|---|---|
+| Active Connections | The current number of client connections actively connected to the PostgreSQL server, including idle, active, and waiting connections. |
+| Available Connections | The number of remaining connection slots available for new client connections, calculated as `max_connections` minus currently used connections and superuser reserved slots. |
+| Connection Utilization Percent | The percentage of total available connection slots currently in use, helping to identify when the server is approaching its connection limit. |
+
+---
+
+## Conflict & Transaction Metrics
+
+| **Metric Name** | **Description** |
+|---|---|
+| Recovery Conflicts Total | The cumulative total number of queries cancelled on the standby due to any type of recovery conflict with WAL replay operations, aggregating all individual conflict types. |
+| Conflicts Tablespace | The number of queries cancelled on the standby due to a conflict with a tablespace drop operation being replayed from the primary's WAL stream. |
+| Conflicts Lock | The number of queries cancelled on the standby due to a lock conflict arising from WAL replay, where a replayed operation required a lock held by a running query. |
+| Conflicts Snapshot | The number of queries cancelled on the standby because their snapshot became too old due to WAL replay advancing the database state beyond what the query could see. |
+| Conflicts Buffer Pin | The number of queries cancelled on the standby because WAL replay needed to update a page that was being held (pinned) in a buffer by a running query. |
+| Conflicts Deadlock | The number of queries cancelled on the standby as a result of a deadlock detected during WAL replay operations. |
+| Oldest Running Transaction Age | The age (in transaction IDs or elapsed time) of the oldest currently active transaction on the server, useful for detecting long-running transactions that may cause table bloat or replication conflicts. |
