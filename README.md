@@ -118,15 +118,6 @@ The agent will automatically execute the plugin within five minutes. You can vie
 
 ---
 
-## Cluster Configuration Metrics
-
-| **Metric Name** | **Description** |
-|---|---|
-| Max Connections | The maximum number of concurrent client connections allowed to the PostgreSQL server, as set by the `max_connections` configuration parameter. |
-| Superuser Reserved Connections | The number of connection slots reserved exclusively for superuser access, as configured by `superuser_reserved_connections`, ensuring administrators can always connect even when the server is at capacity. |
-
----
-
 ## Cluster Identity & Status Metrics
 
 | **Metric Name** | **Description** |
@@ -135,6 +126,8 @@ The agent will automatically execute the plugin within five minutes. You can vie
 | Cluster Status | The current overall health status of the cluster, reflecting whether replication and node connectivity are operating normally. |
 | PostgreSQL Version | The full version string of the PostgreSQL server software currently installed and running on the node. |
 | Timeline ID | The current WAL timeline identifier of the PostgreSQL instance, which increments each time a failover or point-in-time recovery occurs, helping track the history of the cluster's recovery events. |
+| Max Connections | The maximum number of concurrent client connections allowed to the PostgreSQL server, as set by the `max_connections` configuration parameter. |
+| Superuser Reserved Connections | The number of connection slots reserved exclusively for superuser access, as configured by `superuser_reserved_connections`, ensuring administrators can always connect even when the server is at capacity. |
 
 ---
 
