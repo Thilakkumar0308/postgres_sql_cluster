@@ -2,22 +2,7 @@
 
 PostgreSQL Cluster monitoring plugin provides **cluster-level visibility** including replication health, WAL activity, checkpoints, connection usage, and recovery conflicts — all in one place.
 
-This plugin is designed to monitor **Primary and Standby nodes together as a cluster**, giving deep insights into replication status and overall system performance across your entire PostgreSQL setup.
-
-Learn more: [https://www.site24x7.com/plugins/postgres-monitoring.html](https://www.site24x7.com/plugins/postgres-monitoring.html)
-
----
-
-## Quick Installation
-
-If you're using Linux servers, use the plugin installer that checks prerequisites and sets up the plugin automatically using a bash script. You don't need to manually configure the plugin if you use the installer.
-
-Execute the command below in your terminal and follow the on-screen instructions:
-
-```bash
-wget https://raw.githubusercontent.com/site24x7/plugins/master/postgres_cluster/installer/Site24x7PostgresClusterPluginInstaller.sh && sudo bash Site24x7PostgresClusterPluginInstaller.sh
-```
-
+### This plugin is designed to monitor **Primary and Standby nodes together as a cluster**, giving deep insights into replication status and overall system performance across your entire PostgreSQL setup.
 ---
 
 ## Prerequisites
@@ -70,14 +55,12 @@ host = hostname
 port = 5433
 username = user name
 password = password
-cluster_name = cluster name
 
 [pg_replica]
 host = hostname
 port = 5433
 username = user name
 password = password
-cluster_name = cluster name
 ```
 
 ### Step 5 — Test the plugin
@@ -85,7 +68,7 @@ cluster_name = cluster name
 Run the following command to verify the plugin produces valid output before deployment:
 
 ```bash
- python3 postgres_cluster.py  --host "localhost" --port "5432" --username "username" --password "password" --cluster_name "pg_cluster_01"
+ python3 postgres_cluster.py  --host "localhost" --port "5432" --username "username" --password "password"
 ```
 
 ---
@@ -114,7 +97,16 @@ The agent will automatically execute the plugin within five minutes. You can vie
 
 ---
 
-# PostgreSQL Cluster Server Monitoring Plugin Metrics
+# PostgreSQL Metrics Reference
+
+---
+
+## Cluster Configuration Metrics
+
+| **Metric Name** | **Description** |
+|---|---|
+| Max Connections | The maximum number of concurrent client connections allowed to the PostgreSQL server, as set by the `max_connections` configuration parameter. |
+| Superuser Reserved Connections | The number of connection slots reserved exclusively for superuser access, as configured by `superuser_reserved_connections`, ensuring administrators can always connect even when the server is at capacity. |
 
 ---
 
@@ -126,8 +118,6 @@ The agent will automatically execute the plugin within five minutes. You can vie
 | Cluster Status | The current overall health status of the cluster, reflecting whether replication and node connectivity are operating normally. |
 | PostgreSQL Version | The full version string of the PostgreSQL server software currently installed and running on the node. |
 | Timeline ID | The current WAL timeline identifier of the PostgreSQL instance, which increments each time a failover or point-in-time recovery occurs, helping track the history of the cluster's recovery events. |
-| Max Connections | The maximum number of concurrent client connections allowed to the PostgreSQL server, as set by the `max_connections` configuration parameter. |
-| Superuser Reserved Connections | The number of connection slots reserved exclusively for superuser access, as configured by `superuser_reserved_connections`, ensuring administrators can always connect even when the server is at capacity. |
 
 ---
 
@@ -248,3 +238,6 @@ The agent will automatically execute the plugin within five minutes. You can vie
 | Conflicts Buffer Pin | The number of queries cancelled on the standby because WAL replay needed to update a page that was being held (pinned) in a buffer by a running query. |
 | Conflicts Deadlock | The number of queries cancelled on the standby as a result of a deadlock detected during WAL replay operations. |
 | Oldest Running Transaction Age | The age (in transaction IDs or elapsed time) of the oldest currently active transaction on the server, useful for detecting long-running transactions that may cause table bloat or replication conflicts. |
+
+
+<img width="1480" height="716" alt="Screenshot (722)" src="https://github.com/user-attachments/assets/983f0b00-697b-4df3-8789-fdd0b0a7790c" />
